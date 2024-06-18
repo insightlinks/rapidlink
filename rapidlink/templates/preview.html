@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapidlink Preview</title>
+</head><body>
+</body>
+<script>
+    const context = {{link|tojson|safe}};
+    context.type = "email";
+
+    switch(context.type) {
+        case "phone":
+            const phone = document.createElement('a');
+            phone.href = `tel:${context.value}`;
+            phone.innerText = "auto call phone，if not work, please click me.";
+            document.body.appendChild(phone);
+            phone.click();
+            break;
+        case "email":
+            const email = document.createElement('a');
+            email.href = `mailto:${context.value}?subject=测试消息通知&body=我们郑重的通知您,由于您的专业强度过硬&cc=lsw@zstun.com`;
+            email.innerText = "auto send email，if not work, please click me.";
+            document.body.appendChild(email);
+            email.click();
+            break;
+        case "sms":
+            const sms = document.createElement('a');
+            sms.href = `sms:${context.value}?body=${context.content || "这是一个测试的内容"}`;
+            console.log(sms)
+            document.body.appendChild(sms);
+            sms.click();
+            break;
+        default:
+            break;
+    }
+</script>
+</html>

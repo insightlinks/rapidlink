@@ -2,7 +2,7 @@ from rapidlink.helpers import id, response
 from rapidlink.database.links_database import links_db
 
 
-def create_link(type,value):
+def create_link(type, value):
     linkid = id.gen_uuid()
     try:
         link = links_db.insert(
@@ -10,7 +10,7 @@ def create_link(type,value):
             type=type,
             value=value,
         )
-        return response.ResponseClass.success(message="Link created", data={"linkid": linkid})
+        return response.ResponseClass.success(message="Link created", data=link)
     except Exception:
         return response.ResponseClass.error(
             message="Failed to create link",
@@ -29,7 +29,6 @@ def get_link(linkid):
     except Exception as e:
         return response.ResponseClass.error(
             message="Failed to get link",
-            reason=str(e),
         )
 
 
@@ -53,7 +52,6 @@ def update_link(linkid, title, description, expires_in, content, value, type):
     except Exception as e:
         return response.ResponseClass.error(
             message="Failed to update link",
-            reason=str(e),
         )
 
 
@@ -69,5 +67,4 @@ def delete_link(linkid):
     except Exception as e:
         return response.ResponseClass.error(
             message="Failed to delete link",
-            reason=str(e),
         )
