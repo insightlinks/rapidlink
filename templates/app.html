@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>rapidlink</title>
+  </head>
+
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1 class="app-title">rapidlink</h1>
+      </header>
+      <section class="app-content">
+        <button id="signin">登录</button>
+        <button id="createlink">创建Links</button>
+        <button id="previewlink">查看Links</button>
+      </section>
+    </main>
+  </body>
+  <script
+    type="module"
+    src="{{ url_for('static', filename='js/app.js') }}"
+  ></script>
+</html>
