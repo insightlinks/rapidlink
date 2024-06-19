@@ -25,7 +25,7 @@ def create_app(config_class=Config) -> Flask:
         if not linkid or not link:
             return response.ResponseClass.not_found(
                 message="Link not found or invalid",
-                data={"linkid": linkid},
+                reason="Link not found or invalid",
             )
         return render_template("preview.html", link=link)
 

@@ -43,7 +43,6 @@ def signup(username, password):
     if user:
         return response.ResponseClass.bad_request(
             message="User already exists. If this is your account, please log in directly.",
-            data={"username": username},
         )
     try:
         user = user_db.insert(

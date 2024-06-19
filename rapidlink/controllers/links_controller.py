@@ -23,7 +23,6 @@ def get_link(linkid):
         if not link:
             return response.ResponseClass.not_found(
                 message="Link not found",
-                data={"linkid": linkid},
             )
         return response.ResponseClass.success(message="Link found", data=link)
     except Exception as e:
@@ -46,7 +45,6 @@ def update_link(linkid, title, description, expires_in, content, value, type):
         if not link:
             return response.ResponseClass.not_found(
                 message="Link not found",
-                data={"linkid": linkid},
             )
         return response.ResponseClass.success(message="Link updated", data=link)
     except Exception as e:
@@ -61,7 +59,6 @@ def delete_link(linkid):
         if not link:
             return response.ResponseClass.not_found(
                 message="Link not found",
-                data={"linkid": linkid},
             )
         return response.ResponseClass.success(message="Link deleted", data=link)
     except Exception as e:

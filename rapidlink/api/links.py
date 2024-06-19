@@ -23,7 +23,7 @@ def create_link():
 
     if not type or type not in ["sms", "email", "phone"]:
         return response.ResponseClass.bad_request(
-            message="Invalid type", data={"type": type}
+            message="Invalid type"
         )
     
     # 如果是短信或电话, 则需要验证值是否为手机号
