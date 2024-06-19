@@ -26,7 +26,10 @@ jobs:
     - name: Login to Heroku
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku auth:token
+      run: echo "$HEROKU_API_KEY" | heroku auth:token
+
+    - name: Add Heroku remote
+      run: heroku git:remote -a rapidlinkapp
 
     - name: Deploy to Heroku
       run: git push heroku main
