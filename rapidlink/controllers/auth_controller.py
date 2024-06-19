@@ -9,20 +9,17 @@ def login(username, password):
     if not user:
         return response.ResponseClass.bad_request(
             message="User not found",
-            data={"username": username},
         )
 
     password = id.sha256(password)
     if password != user["password"]:
         return response.ResponseClass.bad_request(
             message="User or password is incorrect",
-            data={"username": username},
         )
 
     if user["password"] != password:
         return response.ResponseClass.bad_request(
             message="User or password is incorrect",
-            data={"username": username},
         )
 
     access_token = create_access_token(username)

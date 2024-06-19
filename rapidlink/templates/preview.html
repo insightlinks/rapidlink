@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rapidlink Preview</title>
-</head><body>
-</body>
-<script>
-    const context = {{link|tojson|safe}};
-    context.type = "email";
-
-    switch(context.type) {
-        case "phone":
-            const phone = document.createElement('a');
-            phone.href = `tel:${context.value}`;
-            phone.innerText = "auto call phone，if not work, please click me.";
-            document.body.appendChild(phone);
-            phone.click();
-            break;
-        case "email":
-            const email = document.createElement('a');
-            email.href = `mailto:${context.value}?subject=测试消息通知&body=我们郑重的通知您,由于您的专业强度过硬&cc=lsw@zstun.com`;
-            email.innerText = "auto send email，if not work, please click me.";
-            document.body.appendChild(email);
-            email.click();
-            break;
-        case "sms":
-            const sms = document.createElement('a');
-            sms.href = `sms:${context.value}?body=${context.content || "这是一个测试的内容"}`;
-            console.log(sms)
-            document.body.appendChild(sms);
-            sms.click();
-            break;
-        default:
-            break;
+  </head>
+  <style>
+    .auto-open-link {
+      display: inline-block;
+      border-radius: 6px;
+      padding: 1px 8px;
+      cursor: pointer;
     }
-</script>
+  </style>
+  <body></body>
+  <script>
+    const context = {{link|tojson|safe}};
+    /**
+     * sms: sms://[phone]?body=[content]
+     * phone: tel://[phone]
+     * email: mailto://[email]?subject=[subject]&body=[content]&cc=[cc]&bcc=[bcc]&attachment=[attachment]
+     */
+    const content = context.content ? `?${context.content}` : '';
+    const supportedMode = {
+        "phone": {
+            type: "phone",
+            value: `tel:${context.value}`,
+            innerText: "auto call phone，if not work, please click me.",
+        },
+        "email": {
+            type: "email",
+            value: `mailto:${context.value}?${content}`,
+            innerText: "auto send email，if not work, please click me.",
+        },
+        "sms": {
+            type: "sms",
+            value: `sms:${context.value}${content}`,
+            innerText: "auto send sms，if not work, please click me.",
+        }
+    }
+
+    const config = Reflect.get(supportedMode, context.type || '') || {};
+    const aTag = document.createElement('a');
+    aTag.href = config.value;
+    aTag.innerText = config.innerText;
+    aTag.classList.add('auto-open-link');
+    document.body.appendChild(aTag);
+    if(aTag.click) {
+        aTag.click();
+    }
+  </script>
 </html>

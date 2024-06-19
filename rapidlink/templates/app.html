@@ -6,15 +6,116 @@
     <title>rapidlink</title>
   </head>
 
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+        sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      font-size: 13px;
+    }
+    form,
+    .signedin-container,
+    .preview-btn {
+      margin-bottom: 20px;
+      padding: 30px;
+      border-radius: 4px;
+      box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+        rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    }
+
+    input,
+    select,
+    button {
+      height: 38px;
+      width: 180px;
+      border: 1px solid #e9e6e6;
+      border-radius: 6px;
+      padding: 0 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    button {
+      background-color: #6f02c9;
+      color: #fff;
+      border: none;
+    }
+    button#clear {
+      color: #000;
+      background-color: #f8f9fa;
+      border: 1px solid #e9e6e6;
+    }
+
+    label {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      font-size: 13px;
+    }
+  </style>
+
   <body>
     <main class="app">
       <header class="app-header">
         <h1 class="app-title">rapidlink</h1>
       </header>
       <section class="app-content">
-        <button id="signin">登录</button>
-        <button id="createlink">创建Links</button>
-        <button id="previewlink">查看Links</button>
+        <form id="signin">
+          <div class="unsignin-container">
+            <label for="username">
+              <span class="value-label">用户名：</span>
+              <input
+                name="username"
+                type="text"
+                id="username"
+                placeholder="用户名"
+              />
+            </label>
+            <br />
+            <label for="password">
+              <span class="value-label">密码：</span>
+              <input
+                name="password"
+                type="password"
+                id="password"
+                placeholder="密码"
+              />
+            </label>
+            <br />
+            <button type="submit">登录</button>
+          </div>
+        </form>
+        <div class="signedin-container" hidden="hidden">
+          <span class="username"></span>
+          <button type="button" id="signout">退出</button>
+        </div>
+
+        <form id="createlinkform">
+          <label for="type">
+            <span class="value-label">链接类型：</span>
+            <select name="type" id="type">
+              <option value="phone">链接拨打电话</option>
+              <option value="sms">发送短信</option>
+              <option value="email">发送邮件</option>
+            </select>
+          </label>
+          <br />
+          <label for="value">
+            <span class="value-label">地址:</span>
+            <input
+              name="value"
+              type="text"
+              id="value"
+              placeholder="值, 手机号或邮箱地址"
+            />
+          </label>
+          <br />
+          <button type="submit" id="createlink">创建Links</button>
+          <button id="clear" type="button">清空</button>
+        </form>
+
+        <div class="preview-btn" hidden="hidden"></div>
       </section>
     </main>
   </body>

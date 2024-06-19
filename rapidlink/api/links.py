@@ -29,12 +29,12 @@ def create_link():
     # 如果是短信或电话, 则需要验证值是否为手机号
     if (type == "sms" or type == "phone") and (not value or not regx.is_phone(value)):
         return response.ResponseClass.bad_request(
-            message="Invalid phone number", data={"value": value, "type": type}
+            message="Invalid phone number"
         )
     # 如果是邮件, 则需要验证值是否为邮箱
     if type == "email" and (not value or not regx.is_email(value)):
         return response.ResponseClass.bad_request(
-            message="Invalid email address", data={"value": value, "type": type}
+            message="Invalid email address"
         )
     return links_controller.create_link(type, value)
 

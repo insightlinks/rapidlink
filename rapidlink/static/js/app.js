@@ -1,58 +1,83 @@
 window.addEventListener("DOMContentLoaded", (event) => {
   const getNode = document.querySelector.bind(document);
 
-  const signin = getNode("#signin");
-  const createLinkBtn = getNode("#createlink");
-  const previewLinkBtn = getNode("#previewlink");
+  const signinform = getNode("#signin");
+  const unsigninContainer = signinform;
+  const signinedContainer = getNode(".signedin-container");
 
-  signin.addEventListener("click", () => {
-    const userformdata = new FormData();
-    userformdata.append("username", "admin");
-    userformdata.append("password", "admin");
+  const createLinkform = getNode("#createlinkform");
+  const previewLinkBtn = getNode(".preview-btn");
+  const signoutBtn = getNode("#signout");
+
+  signoutBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    unsigninContainer.removeAttribute("hidden");
+    signinedContainer.setAttribute("hidden", "hidden");
+    localStorage.removeItem("user_profile");
+    signinform.reset();
+  });
+
+  signinform.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const userformdata = new FormData(signinform);
     fetch("/auth/signin", { method: "POST", body: userformdata })
       .then((res) => {
         if (res.status === 401) {
-          alert("Invalid username or password");
-          return;
+          return Promise.reject(new Error("Unauthorized"));
         }
         return res.json();
       })
       .then((result) => {
-        localStorage.setItem("user_profile", result.data || {});
+        if (result.code !== 200) {
+          return Promise.reject(new Error(result.message || "Unknown error"));
+        }
+        unsigninContainer.setAttribute("hidden", "hidden");
+        signinedContainer.removeAttribute("hidden");
+        signinedContainer.querySelector(".username").textContent =
+          result.data.user.username;
+        localStorage.setItem("user_profile", JSON.stringify(result.data));
         alert("Signin successful");
       })
       .catch((err) => {
-        console.log(err);
-        alert("Signin failed");
+        alert("Signin failed: " + err.message);
       });
   });
 
-  createLinkBtn.addEventListener("click", () => {
-    const user_profile = localStorage.getItem("user_profile");
+  createLinkform.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const user_profile = JSON.parse(localStorage.getItem("user_profile")) || {};
     if (!user_profile) {
       alert("Please signin first");
       return;
     }
-    const linkformdata = new FormData();
-    linkformdata.append("title", "电话消息");
-    linkformdata.append("description", "测试通过连接直接拨打电话");
-    linkformdata.append("type", "phone");
-    linkformdata.append("value", "17002830465");
-
-    fetch("/api/links", { method: "POST", body: linkformdata })
+    const linkformdata = new FormData(createLinkform);
+    fetch("/api/links", {
+      method: "POST",
+      body: linkformdata,
+      headers: {
+        Authorization: `Bearer ${user_profile.access_token}`,
+      },
+    })
       .then((res) => {
         if (res.status === 401) {
           alert("Unauthorized");
-          return;
+          return Promise.reject(new Error("Unauthorized"));
         }
         return res.json();
       })
       .then((result) => {
+        if (result.code !== 200) {
+          return Promise.reject(new Error(result.message || "Unknown error"));
+        }
         alert("Link created successfully");
+        createLinkform.setAttribute("hidden", "hidden");
+        previewLinkBtn.removeAttribute("hidden");
+        previewLinkBtn.innerHTML = `<a href="/preview/${result.data.linkid}" target="_blank">
+        访问链接: ${window.location.origin}/preview/${result.data.linkid}
+        </a>`;
       })
       .catch((err) => {
-        console.log(err);
-        alert("Link creation failed");
+        alert("Link creation failed: " + err.message);
       });
   });
 });
