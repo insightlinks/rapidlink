@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rapidlink-tls-ingress
+  namespace: rapidlink
+spec:
+  tls:
+  - hosts:
+      - rapidlink.xxx.com
+    secretName: rapidly-tls
+  rules:
+  - host: rapidlink.xxx.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rapidlink-service
+            port:
+              number: 5000
