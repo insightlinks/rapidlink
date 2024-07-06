@@ -3,13 +3,11 @@ kind: Deployment
 metadata:
   name: rapidlink
   namespace: rapidlink
-  labels:
-    app: rapidlink
 spec:
   selector:
     matchLabels:
       app: rapidlink
-  replicas: 1
+  replicas: 2
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -28,7 +26,6 @@ spec:
       # - Each init container must complete successfully before the next one starts.
       containers:
         - name: rapidlink
-          # your image should be here
           image: MYAPP:latest
           resources:
             requests:

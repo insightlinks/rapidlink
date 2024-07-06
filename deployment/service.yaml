@@ -14,8 +14,5 @@ spec:
   ports:
     - name: rapidlink-https
       protocol: TCP
-      port: 5000
+      port: 80
       targetPort: 5000
-      # If you set the `spec.type` field to `NodePort` and you want a specific port number,
-      # you can specify a value in the `spec.ports[*].nodePort` field.
-      # nodePort:

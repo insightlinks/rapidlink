@@ -18,4 +18,4 @@ spec:
           service:
             name: rapidlink-service
             port:
-              number: 5000
+              number: 80
