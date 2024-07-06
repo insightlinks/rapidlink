@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.12-slim
 
 WORKDIR /app
 
@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt --no-cache-dir
 
 EXPOSE 5000
 
-CMD ["python3", "app.py"]
+CMD ["python", "app.py"]
